@@ -9,9 +9,36 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <!-- Your content goes here -->
-  <h1>Hello, world!</h1>
-  <p>This is a bare-bones HTML page.</p>
+  <header>
+    <h1>Hit Formula.fm</h1>
+    <p>Cracking the code behind chart-topping tracks</p>
+  </header>
+  <main>
+    <section>
+      <h2>🎶 What Makes a Hit?</h2>
+      <p>
+        This explorable explanation investigates the acoustic DNA of popular songs. We compare
+        tracks across popularity, danceability, energy, and more — all with a focus on
+        understanding how audio features drive chart performance.
+      </p>
+    </section>
+  </main>
+
+
+  <h1>Song Feature vs Popularity</h1>
+  <label for="featureSelect">Choose feature:&nbsp;</label>
+  <select id="featureSelect">
+    <option value="danceability">Danceability</option>
+    <option value="energy">Energy</option>
+    <option value="valence">Valence</option>
+    <option value="acousticness">Acousticness</option>
+    <option value="speechiness">Speechiness</option>
+  </select>
+
   <div id="chart"></div>
+  <div id="tooltip"></div>
+
+  <!-- make sure this comes *after* the above elements -->
+  <script src="main.js"></script>
 </body>
 </html>
