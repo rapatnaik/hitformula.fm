@@ -11,6 +11,21 @@ body {
     transition: background 0.4s ease;
   }
 
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: linear-gradient(to right, #00838f, #00acc1);
+    color: white;
+    padding: 16px 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    font-size: 1.5em;
+    letter-spacing: 1.2px;
+  }
+
 
   #chart { width: 900px; margin: auto; }
   #tooltip {
