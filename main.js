@@ -1,3 +1,7 @@
+
+// main.js
+
+// Wait until the DOM is fully loaded
 const margin = { top: 30, right: 20, bottom: 40, left: 60 };
 const width = 900 - margin.left - margin.right;
 const height = 450 - margin.top - margin.bottom;
@@ -11,25 +15,20 @@ const svg = d3
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const tooltip = d3.select("#tooltip");
-
 let data;
 
-// Update this to match your filename
 const CSV_FILE = "sample.csv";
 
-// Load and parse data
 d3.csv(CSV_FILE).then((rawData) => {
-  data = rawData.map((d) => {
-    return {
-      song_name: d.song_name,
-      popularity: +d.popularity,
-      danceability: +d.danceability,
-      energy: +d.energy,
-      valence: +d.valence,
-      acousticness: +d.acousticness,
-      speechiness: +d.speechiness,
-    };
-  });
+  data = rawData.map((d) => ({
+    song_name: d.song_name,
+    popularity: +d.popularity,
+    danceability: +d.danceability,
+    energy: +d.energy,
+    valence: +d.valence,
+    acousticness: +d.acousticness,
+    speechiness: +d.speechiness,
+  }));
 
   updateChart("danceability");
 });
@@ -37,6 +36,7 @@ d3.csv(CSV_FILE).then((rawData) => {
 function updateChart(feature) {
   svg.selectAll("*").remove();
 
+  // Scales
   const x = d3
     .scaleLinear()
     .domain([0, d3.max(data, (d) => d[feature])])
@@ -47,13 +47,37 @@ function updateChart(feature) {
     .domain([0, 100])
     .range([height, 0]);
 
+  // Axes
+  const xAxis = d3.axisBottom(x);
+  const yAxis = d3.axisLeft(y);
+
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x));
+    .call(xAxis);
 
-  svg.append("g").call(d3.axisLeft(y));
+  svg.append("g").call(yAxis);
 
+  // Axis Labels
+  svg
+    .append("text")
+    .attr("class", "axis-label x-label")
+    .attr("text-anchor", "middle")
+    .attr("x", width / 2)
+    .attr("y", height + margin.bottom - 5)
+    .text(feature.charAt(0).toUpperCase() + feature.slice(1));
+
+  svg
+    .append("text")
+    .attr("class", "axis-label y-label")
+    .attr("text-anchor", "middle")
+    .attr(
+      "transform",
+      `translate(${-margin.left + 15},${height / 2}) rotate(-90)`
+    )
+    .text("Popularity");
+
+  // Data points
   svg
     .selectAll("circle")
     .data(data)
@@ -65,7 +89,9 @@ function updateChart(feature) {
     .on("mouseover", (event, d) => {
       tooltip
         .style("opacity", 1)
-        .html(`<strong>${d.song_name}</strong><br>${feature}: ${d[feature]}<br>Popularity: ${d.popularity}`)
+        .html(
+          `<strong>${d.song_name}</strong><br>${feature}: ${d[feature]}<br>Popularity: ${d.popularity}`
+        )
         .style("left", event.pageX + 10 + "px")
         .style("top", event.pageY - 28 + "px");
     })
@@ -76,3 +102,4 @@ d3.select("#featureSelect").on("change", function () {
   const selected = this.value;
   updateChart(selected);
 });
+
